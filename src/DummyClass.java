@@ -1,9 +1,9 @@
+public final class DummyClass
+{
 
-public final class DummyClass {
+	public DummyClass()
+	{
+	}
 
-    public DummyClass()
-    {
-    }
-
-    public static DummyClass cache[];
+	public static DummyClass cache[];
 }
