@@ -27,7 +27,7 @@ public final class Flo
 			else if (i == 1)
 			{
 				anInt390 = stream.read3Bytes();
-				method262(anInt390);
+				rgbToHsl(anInt390);
 			}
 			else if (i == 2)
 				anInt391 = stream.readUnsignedByte();
@@ -44,7 +44,7 @@ public final class Flo
 				int l = lightness;
 				int i1 = anInt397;
 				int j1 = stream.read3Bytes();
-				method262(j1);
+				rgbToHsl(j1);
 				hue = j;
 				saturation = k;
 				lightness = l;
@@ -58,7 +58,7 @@ public final class Flo
 		} while (true);
 	}
 
-	private void method262(int rgb)
+	private void rgbToHsl(int rgb)
 	{
 		// http://support.microsoft.com/kb/29240
 		
