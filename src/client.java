@@ -3091,7 +3091,7 @@ public final class client extends RSApplet
 			aBoolean1017 = false;
 			outStream1.createFrame(86);
 			outStream1.writeWord(anInt1184);
-			outStream1.method432(minimapInt1);
+			outStream1.method432(viewRotation);
 		}
 		if (super.awtFocus && !aBoolean954)
 		{
@@ -3254,23 +3254,23 @@ public final class client extends RSApplet
 			anInt988 = 0;
 			int l1 = (int) (Math.random() * 8D);
 			if ((l1 & 1) == 1)
-				anInt1278 += anInt1279;
+				cameraOffsetX += anInt1279;
 			if ((l1 & 2) == 2)
-				anInt1131 += anInt1132;
+				cameraOffsetY += anInt1132;
 			if ((l1 & 4) == 4)
-				anInt896 += anInt897;
+				viewRotationOffset += anInt897;
 		}
-		if (anInt1278 < -50)
+		if (cameraOffsetX < -50)
 			anInt1279 = 2;
-		if (anInt1278 > 50)
+		if (cameraOffsetX > 50)
 			anInt1279 = -2;
-		if (anInt1131 < -55)
+		if (cameraOffsetY < -55)
 			anInt1132 = 2;
-		if (anInt1131 > 55)
+		if (cameraOffsetY > 55)
 			anInt1132 = -2;
-		if (anInt896 < -40)
+		if (viewRotationOffset < -40)
 			anInt897 = 1;
-		if (anInt896 > 40)
+		if (viewRotationOffset > 40)
 			anInt897 = -1;
 		anInt1254++;
 		if (anInt1254 > 500)
@@ -3278,17 +3278,17 @@ public final class client extends RSApplet
 			anInt1254 = 0;
 			int i2 = (int) (Math.random() * 8D);
 			if ((i2 & 1) == 1)
-				minimapInt2 += anInt1210;
+				minimapRotation += anInt1210;
 			if ((i2 & 2) == 2)
-				minimapInt3 += anInt1171;
+				minimapZoom += anInt1171;
 		}
-		if (minimapInt2 < -60)
+		if (minimapRotation < -60)
 			anInt1210 = 2;
-		if (minimapInt2 > 60)
+		if (minimapRotation > 60)
 			anInt1210 = -2;
-		if (minimapInt3 < -20)
+		if (minimapZoom < -20)
 			anInt1171 = 1;
-		if (minimapInt3 > 10)
+		if (minimapZoom > 10)
 			anInt1171 = -1;
 		anInt1010++;
 		if (anInt1010 > 50)
@@ -6013,11 +6013,11 @@ public final class client extends RSApplet
 		int l = k * k + j * j;
 		if (l > 4225 && l < 0x15f90)
 		{
-			int i1 = minimapInt1 + minimapInt2 & 0x7ff;
+			int i1 = viewRotation + minimapRotation & 0x7ff;
 			int j1 = Model.modelIntArray1[i1];
 			int k1 = Model.modelIntArray2[i1];
-			j1 = (j1 * 256) / (minimapInt3 + 256);
-			k1 = (k1 * 256) / (minimapInt3 + 256);
+			j1 = (j1 * 256) / (minimapZoom + 256);
+			k1 = (k1 * 256) / (minimapZoom + 256);
 			int l1 = j * j1 + k * k1 >> 16;
 			int i2 = j * k1 - k * j1 >> 16;
 			double d = Math.atan2(l1, i2);
@@ -6290,12 +6290,12 @@ public final class client extends RSApplet
 				spellSelected = 0;
 				loadingStage = 0;
 				currentSound = 0;
-				anInt1278 = (int) (Math.random() * 100D) - 50;
-				anInt1131 = (int) (Math.random() * 110D) - 55;
-				anInt896 = (int) (Math.random() * 80D) - 40;
-				minimapInt2 = (int) (Math.random() * 120D) - 60;
-				minimapInt3 = (int) (Math.random() * 30D) - 20;
-				minimapInt1 = (int) (Math.random() * 20D) - 10 & 0x7ff;
+				cameraOffsetX = (int) (Math.random() * 100D) - 50;
+				cameraOffsetY = (int) (Math.random() * 110D) - 55;
+				viewRotationOffset = (int) (Math.random() * 80D) - 40;
+				minimapRotation = (int) (Math.random() * 120D) - 60;
+				minimapZoom = (int) (Math.random() * 30D) - 20;
+				viewRotation = (int) (Math.random() * 20D) - 10 & 0x7ff;
 				minimapState = 0;
 				anInt985 = -1;
 				destX = 0;
@@ -7737,11 +7737,11 @@ public final class client extends RSApplet
 			{
 				i -= 73;
 				j -= 75;
-				int k = minimapInt1 + minimapInt2 & 0x7ff;
+				int k = viewRotation + minimapRotation & 0x7ff;
 				int i1 = Texture.anIntArray1470[k];
 				int j1 = Texture.anIntArray1471[k];
-				i1 = i1 * (minimapInt3 + 256) >> 8;
-				j1 = j1 * (minimapInt3 + 256) >> 8;
+				i1 = i1 * (minimapZoom + 256) >> 8;
+				j1 = j1 * (minimapZoom + 256) >> 8;
 				int k1 = j * i1 + i * j1 >> 11;
 				int l1 = j * j1 - i * i1 >> 11;
 				int i2 = myPlayer.x + k1 >> 7;
@@ -7752,10 +7752,10 @@ public final class client extends RSApplet
 				{
 					outStream1.put(i);
 					outStream1.put(j);
-					outStream1.writeWord(minimapInt1);
+					outStream1.writeWord(viewRotation);
 					outStream1.put(57);
-					outStream1.put(minimapInt2);
-					outStream1.put(minimapInt3);
+					outStream1.put(minimapRotation);
+					outStream1.put(minimapZoom);
 					outStream1.put(89);
 					outStream1.writeWord(myPlayer.x);
 					outStream1.writeWord(myPlayer.y);
@@ -9107,8 +9107,8 @@ public final class client extends RSApplet
 	{
 		try
 		{
-			int j = myPlayer.x + anInt1278;
-			int k = myPlayer.y + anInt1131;
+			int j = myPlayer.x + cameraOffsetX;
+			int k = myPlayer.y + cameraOffsetY;
 			if (anInt1014 - j < -500 || anInt1014 - j > 500
 					|| anInt1015 - k < -500 || anInt1015 - k > 500)
 			{
@@ -9131,7 +9131,7 @@ public final class client extends RSApplet
 				anInt1187 += (-12 - anInt1187) / 2;
 			else
 				anInt1187 /= 2;
-			minimapInt1 = minimapInt1 + anInt1186 / 2 & 0x7ff;
+			viewRotation = viewRotation + anInt1186 / 2 & 0x7ff;
 			anInt1184 += anInt1187 / 2;
 			if (anInt1184 < 128)
 				anInt1184 = 128;
@@ -9918,18 +9918,18 @@ public final class client extends RSApplet
 				if (abyte0[i5] == 0)
 					ai[i5] = 0;
 			
-			compass.method352(33, minimapInt1, anIntArray1057, 256,
+			compass.method352(33, viewRotation, anIntArray1057, 256,
 				anIntArray968, 25, 0, 0, 33, 25);
 			aRSImageProducer_1165.initDrawingArea();
 			return;
 		}
-		int i = minimapInt1 + minimapInt2 & 0x7ff;
+		int i = viewRotation + minimapRotation & 0x7ff;
 		int j = 48 + myPlayer.x / 32;
 		int l2 = 464 - myPlayer.y / 32;
 		
 		aClass30_Sub2_Sub1_Sub1_1263.method352(151, i, anIntArray1229,
-			256 + minimapInt3, anIntArray1052, l2, 5, 25, 146, j);
-		compass.method352(33, minimapInt1, anIntArray1057, 256, anIntArray968,
+			256 + minimapZoom, anIntArray1052, l2, 5, 25, 146, j);
+		compass.method352(33, viewRotation, anIntArray1057, 256, anIntArray968,
 			25, 0, 0, 33, 25);
 		for (int j5 = 0; j5 < anInt1071; j5++)
 		{
@@ -11080,14 +11080,14 @@ public final class client extends RSApplet
 
 	private void markMinimap(Sprite sprite, int i, int j)
 	{
-		int k = minimapInt1 + minimapInt2 & 0x7ff;
+		int k = viewRotation + minimapRotation & 0x7ff;
 		int l = i * i + j * j;
 		if (l > 6400)
 			return;
 		int i1 = Model.modelIntArray1[k];
 		int j1 = Model.modelIntArray2[k];
-		i1 = (i1 * 256) / (minimapInt3 + 256);
-		j1 = (j1 * 256) / (minimapInt3 + 256);
+		i1 = (i1 * 256) / (minimapZoom + 256);
+		j1 = (j1 * 256) / (minimapZoom + 256);
 		int k1 = j * i1 + i * j1 >> 16;
 		int l1 = j * j1 - i * i1 >> 16;
 		if (l > 2500)
@@ -12550,7 +12550,7 @@ public final class client extends RSApplet
 				i = anInt984 / 256;
 			if (aBooleanArray876[4] && anIntArray1203[4] + 128 > i)
 				i = anIntArray1203[4] + 128;
-			int k = minimapInt1 + anInt896 & 0x7ff;
+			int k = viewRotation + viewRotationOffset & 0x7ff;
 			setCameraPos(600 + i * 3, i, anInt1014,
 					method42(plane, myPlayer.y, myPlayer.x) - 50, k, anInt1015);
 		}
@@ -12849,7 +12849,7 @@ public final class client extends RSApplet
 	private int anInt893;
 	private int[] anIntArray894;
 	private Stream[] aStreamArray895s;
-	private int anInt896;
+	private int viewRotationOffset;
 	private int anInt897;
 	private int friendsCount;
 	private int anInt900;
@@ -13068,7 +13068,7 @@ public final class client extends RSApplet
 	private final int[][][] anIntArrayArrayArray1129;
 	private final int[] tabInterfaceIDs = { -1, -1, -1, -1, -1, -1, -1, -1, -1,
 			-1, -1, -1, -1, -1, -1 };
-	private int anInt1131;
+	private int cameraOffsetY;
 	private int anInt1132;
 	private int menuActionRow;
 	private static int anInt1134;
@@ -13106,7 +13106,7 @@ public final class client extends RSApplet
 	private int daysSinceRecovChange;
 	private RSSocket socketStream;
 	private int anInt1169;
-	private int minimapInt3;
+	private int minimapZoom;
 	private int anInt1171;
 	private long aLong1172;
 	private String myUsername;
@@ -13122,7 +13122,7 @@ public final class client extends RSApplet
 	private int[] anIntArray1182;
 	private byte[][] aByteArrayArray1183;
 	private int anInt1184;
-	private int minimapInt1;
+	private int viewRotation;
 	private int anInt1186;
 	private int anInt1187;
 	private static int anInt1188;
@@ -13144,7 +13144,7 @@ public final class client extends RSApplet
 	private static boolean flaggedCheating;
 	private final int[] sound;
 	private int anInt1208;
-	private int minimapInt2;
+	private int minimapRotation;
 	private int anInt1210;
 	private int anInt1211;
 	private String promptInput;
@@ -13205,7 +13205,7 @@ public final class client extends RSApplet
 	private TextDrawingArea chatTextDrawingArea;
 	private int anInt1275;
 	private int backDialogID;
-	private int anInt1278;
+	private int cameraOffsetX;
 	private int anInt1279;
 	private int[] bigX;
 	private int[] bigY;
