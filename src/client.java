@@ -6133,34 +6133,33 @@ public final class client extends RSApplet
 			socketStream = new RSSocket(this, openSocket(43594 + portOff));
 
 			// The name is converted into a long, so that a 'hash' from the
-			// username can be sent
+			// username can be sent.
 			long nameLong = TextClass.longForName(username);
 			// The hash for "jameskmonger" is 18, the has for "andrew" is 31. It
-			// would be interesting
-			// to know what this is used for.
+			// would be interesting to know what this is used for.
 			int nameHash = (int) (nameLong >> 16 & 31L);
 
 			outStream1.offset = 0;
 
 			// 14 is sent to the server to signify that the connection type is a
-			// login request
+			// login request.
 			outStream1.put(14);
 
-			// The hash generated earlier is then sent
+			// The hash generated earlier is then sent.
 			outStream1.put(nameHash);
 			socketStream.write(2, outStream1.buffer);
 
-			// 8 bytes are received and ignored by the client
+			// 8 bytes are received and ignored by the client.
 			for (int i = 0; i < 8; i++)
 			{
 				socketStream.read();
 			}
 
 			// A login status code is received. At this stage, the status code 0
-			// is expected
+			// is expected.
 			int statusCode = socketStream.read();
 			// The original login status code is stored. This is used to determine
-			// what action to take when the status code -1 is received
+			// what action to take when the status code -1 is received.
 			int originalStatusCode = statusCode;
 			
 			if (statusCode == 0)
@@ -6187,13 +6186,14 @@ public final class client extends RSApplet
 				outStream1.putInt(seed[1]);
 				outStream1.putInt(seed[2]);
 				outStream1.putInt(seed[3]);
-				// The UID of the client is then added to queue B, most likely to identify any connecting clients to detect
-				// botters, etc.
+				// The UID of the client is then added to queue B, most likely to uniquely identify
+				// all clients.
 				outStream1.putInt(signlink.uid);
 				// The username and password are then added to queue B.
 				outStream1.putString(username);
 				outStream1.putString(password);
-				// RSA is applied to queue B, although most private servers do not use encryption when sending packets.
+				// RSA is applied to queue B, although most private servers do not use encryption when sending
+				// and receiving packets.
 				outStream1.applyRSA();
 				
 				outStream2.offset = 0;
@@ -6256,7 +6256,7 @@ public final class client extends RSApplet
 			}
 			if (statusCode == 2)
 			{
-				// If the status code 2 is sent, the connection was successful and client setup is finalised
+				// If the status code 2 is sent, the connection was successful and client setup is finalised.
 				
 				// The player's "player rights" are received (0 for player, 1 for mod, etc)
 				playerRights = socketStream.read();
@@ -6367,82 +6367,99 @@ public final class client extends RSApplet
 			}
 			if (statusCode == 3)
 			{
-				// If the user attempts to log in with an invalid username or password, the
-				// status code 3 is received
+				// The code 3 is received if the entered username or password is invalid.
 				loginMessage1 = "";
 				loginMessage2 = "Invalid username or password.";
 				return;
 			}
 			if (statusCode == 4)
 			{
-				// If the user's account has been disabled, the status code 4 is received
+				// The code 4 is received if the user's account has been disabled.
 				loginMessage1 = "Your account has been disabled.";
 				loginMessage2 = "Please check your message-center for details.";
 				return;
 			}
 			if (statusCode == 5)
 			{
-				// If the user's account is already logged in, the status code 5 is received
+				// The code 5 is received if the user's account is already logged in.
 				loginMessage1 = "Your account is already logged in.";
 				loginMessage2 = "Try again in 60 secs...";
 				return;
 			}
 			if (statusCode == 6)
 			{
+				// The code 6 is received if there has been a server update and the user has not
+				// reloaded their (outdated) client.
 				loginMessage1 = "RuneScape has been updated!";
 				loginMessage2 = "Please reload this page.";
 				return;
 			}
 			if (statusCode == 7)
 			{
+				// The code 7 is received if the world that the player is attempting to connect to
+				// is full.
 				loginMessage1 = "This world is full.";
 				loginMessage2 = "Please use a different world.";
 				return;
 			}
 			if (statusCode == 8)
 			{
+				
+				// The code 8 is received if there is an error connecting to the login server.
 				loginMessage1 = "Unable to connect.";
 				loginMessage2 = "Login server offline.";
 				return;
 			}
 			if (statusCode == 9)
 			{
+				// The code 9 is received if there are too many connections from the player's IP.
 				loginMessage1 = "Login limit exceeded.";
 				loginMessage2 = "Too many connections from your address.";
 				return;
 			}
 			if (statusCode == 10)
 			{
+				// The code 10 is received for a 'bad session id'. I don't know what this means.
 				loginMessage1 = "Unable to connect.";
 				loginMessage2 = "Bad session id.";
 				return;
 			}
 			if (statusCode == 11)
 			{
+				// The code 11 is received if the login server rejects the session for whatever reason.
 				loginMessage2 = "Login server rejected session.";
 				loginMessage2 = "Please try again.";
 				return;
 			}
 			if (statusCode == 12)
 			{
+				// The code 12 is received if the user is attempting to connect to a member's world without
+				// being a member
 				loginMessage1 = "You need a members account to login to this world.";
 				loginMessage2 = "Please subscribe, or use a different world.";
 				return;
 			}
 			if (statusCode == 13)
 			{
+				// The code 13 is received if the login couldn't be completed, presumably due to a problem
+				// with that world's server.
 				loginMessage1 = "Could not complete login.";
 				loginMessage2 = "Please try using a different world.";
 				return;
 			}
 			if (statusCode == 14)
 			{
+				// The code 14 is received if an update is underway whilst the user tries to connect.
 				loginMessage1 = "The server is being updated.";
 				loginMessage2 = "Please wait 1 minute and try again.";
 				return;
 			}
 			if (statusCode == 15)
 			{
+				// When the code 15 is received, the login is completed as usual but chat messages are not
+				// cleared. This is most likely decided by the 'recoveringConnection' boolean and is the
+				// reason that sometimes when you lose connection to RuneScape, your chat messages stay
+				// intact when you reconnect.
 				loggedIn = true;
 				outStream1.offset = 0;
 				inStream.offset = 0;
@@ -6460,29 +6477,36 @@ public final class client extends RSApplet
 			}
 			if (statusCode == 16)
 			{
+				// The code 16 is sent after too many failed login attempts.
 				loginMessage1 = "Login attempts exceeded.";
 				loginMessage2 = "Please wait 1 minute and try again.";
 				return;
 			}
 			if (statusCode == 17)
 			{
+				// The code 17 is sent if the user is in a members-only area, but is not connecting to
+				// a members-only world.
 				loginMessage1 = "You are standing in a members-only area.";
 				loginMessage2 = "To play on this world move to a free area first";
 				return;
 			}
 			if (statusCode == 20)
 			{
+				// The code 20 is received if, for some reason, the user attempts to connect to an
+				// invalid login server.
 				loginMessage1 = "Invalid loginserver requested";
 				loginMessage2 = "Please try using a different world.";
 				return;
 			}
 			if (statusCode == 21)
 			{
-				for (int k1 = socketStream.read(); k1 >= 0; k1--)
+				// The status code 21 is received if the player has just left another world. A byte is
+				// sent to show how many seconds remaining until logging in again.
+				for (int number = socketStream.read(); number >= 0; number--)
 				{
 					loginMessage1 = "You have only just left another world";
 					loginMessage2 = "Your profile will be transferred in: "
-							+ k1 + " seconds";
+							+ number + " seconds";
 					drawLoginScreen(true);
 					try
 					{
@@ -6500,6 +6524,10 @@ public final class client extends RSApplet
 			{
 				if (originalStatusCode == 0)
 				{
+					// If the first code received was 0 and the second code was -1, the client
+					// waits 2000ms and then attempts to log in, whilst counting the amount of
+					// login failures. If there are more than 2 login failures, the client will
+					// tell the user to wait one minute and try again.
 					if (loginFailures < 2)
 					{
 						try
@@ -6522,6 +6550,8 @@ public final class client extends RSApplet
 				}
 				else
 				{
+					// If the first code received was not 0 and the second code was -1, the client
+					// will tell the user to try a different world.
 					loginMessage1 = "No response from server";
 					loginMessage2 = "Please try using a different world.";
 					return;
@@ -6529,6 +6559,9 @@ public final class client extends RSApplet
 			}
 			else
 			{
+				// If the code received does not fit any of the recognised code, the
+				// code is printed to the console, and the user is told to try another
+				// world as there has been an unexpected server response.
 				System.out.println("response:" + statusCode);
 				loginMessage1 = "Unexpected server response";
 				loginMessage2 = "Please try using a different world.";
@@ -6539,6 +6572,8 @@ public final class client extends RSApplet
 		{
 			loginMessage1 = "";
 		}
+		// If this point is reached, there has been no response from the server, and so
+		// the 'error connecting to server' message is displayed.
 		loginMessage2 = "Error connecting to server.";
 	}
 
