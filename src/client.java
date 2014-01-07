@@ -571,7 +571,7 @@ public final class client extends RSApplet
 				k3 = plane;
 			if (k3 < plane - 1)
 				k3 = plane - 1;
-			if (highMemory)
+			if (lowMemory)
 				worldController.method275(ObjectManager.anInt145);
 			else
 				worldController.method275(0);
@@ -599,7 +599,7 @@ public final class client extends RSApplet
 			outStream1.createFrame(210);
 			outStream1.putInt(0x3f008edd);
 		}
-		if (highMemory && signlink.cache_dat != null)
+		if (lowMemory && signlink.cache_dat != null)
 		{
 			int j = onDemandFetcher.getVersionCount(0);
 			for (int i1 = 0; i1 < j; i1++)
@@ -819,7 +819,7 @@ public final class client extends RSApplet
 
 	private boolean replayWave()
 	{
-		return signlink.wavereplay();
+		return signlink.replayWave();
 	}
 
 	private void loadError()
@@ -1300,7 +1300,7 @@ public final class client extends RSApplet
 			}
 			if (k == 4)
 				musicEnabled = false;
-			if (musicEnabled != flag1 && !highMemory)
+			if (musicEnabled != flag1 && !lowMemory)
 			{
 				if (musicEnabled)
 				{
@@ -1312,7 +1312,7 @@ public final class client extends RSApplet
 				{
 					stopMidi();
 				}
-				prevSong = 0;
+				previousSong = 0;
 			}
 		}
 		if (j == 4)
@@ -1708,7 +1708,7 @@ public final class client extends RSApplet
 
 	private void method37(int j)
 	{
-		if (!highMemory)
+		if (!lowMemory)
 		{
 			if (Texture.anIntArray1480[17] >= j)
 			{
@@ -2048,7 +2048,7 @@ public final class client extends RSApplet
 		stopMidi();
 		currentSong = -1;
 		nextSong = -1;
-		prevSong = 0;
+		previousSong = 0;
 	}
 
 	private void method45()
@@ -2140,7 +2140,7 @@ public final class client extends RSApplet
 			}
 			if (player == null || !player.isVisible())
 				continue;
-			player.aBoolean1699 = (highMemory && playerCount > 50 || playerCount > 200)
+			player.aBoolean1699 = (lowMemory && playerCount > 50 || playerCount > 200)
 					&& !flag && player.anInt1517 == player.anInt1511;
 			int j1 = player.x >> 7;
 			int k1 = player.y >> 7;
@@ -2552,7 +2552,7 @@ public final class client extends RSApplet
 	{
 		WorldController.lowMem = false;
 		Texture.lowMem = false;
-		highMemory = false;
+		lowMemory = false;
 		ObjectManager.lowMem = false;
 		ObjectDef.lowMem = false;
 	}
@@ -2606,7 +2606,7 @@ public final class client extends RSApplet
 
 	private void loadingStages()
 	{
-		if (highMemory && loadingStage == 2 && ObjectManager.anInt131 != plane)
+		if (lowMemory && loadingStage == 2 && ObjectManager.anInt131 != plane)
 		{
 			aRSImageProducer_1165.initDrawingArea();
 			aTextDrawingArea_1271.drawText(0, "Loading - please wait.", 151,
@@ -2623,7 +2623,7 @@ public final class client extends RSApplet
 			if (j != 0 && System.currentTimeMillis() - aLong824 > 0x57e40L)
 			{
 				signlink.reporterror(myUsername + " glcfb " + isaacSeed + ","
-						+ j + "," + highMemory + "," + decompressors[0] + ","
+						+ j + "," + lowMemory + "," + decompressors[0] + ","
 						+ onDemandFetcher.getNodeCount() + "," + plane + ","
 						+ anInt1069 + "," + anInt1070);
 				aLong824 = System.currentTimeMillis();
@@ -2924,7 +2924,7 @@ public final class client extends RSApplet
 
 	private boolean saveWave(byte abyte0[], int i)
 	{
-		return abyte0 == null || signlink.wavesave(abyte0, i);
+		return abyte0 == null || signlink.saveWave(abyte0, i);
 	}
 
 	private void method60(int i)
@@ -6212,7 +6212,7 @@ public final class client extends RSApplet
 				// The client version - in this case 317 - is added.
 				outStream2.writeWord(317);
 				// Followed by a single byte to show whether the client is in high memory mode or not.
-				if(highMemory)
+				if(!lowMemory)
 				{
 					outStream2.put(1);
 				}
@@ -6289,7 +6289,7 @@ public final class client extends RSApplet
 				itemSelected = 0;
 				spellSelected = 0;
 				loadingStage = 0;
-				anInt1062 = 0;
+				currentSound = 0;
 				anInt1278 = (int) (Math.random() * 100D) - 50;
 				anInt1131 = (int) (Math.random() * 110D) - 55;
 				anInt896 = (int) (Math.random() * 80D) - 40;
@@ -7143,22 +7143,22 @@ public final class client extends RSApplet
 
 	private void method90()
 	{
-		for (int i = 0; i < anInt1062; i++)
-			if (anIntArray1250[i] <= 0)
+		for (int i = 0; i < currentSound; i++)
+			if (soundDelay[i] <= 0)
 			{
 				boolean flag1 = false;
 				try
 				{
-					if (anIntArray1207[i] == anInt874
-							&& anIntArray1241[i] == anInt1289)
+					if (sound[i] == currentSoundId
+							&& soundType[i] == currentSoundType)
 					{
 						if (!replayWave())
 							flag1 = true;
 					}
 					else
 					{
-						Stream stream = Sounds.method241(anIntArray1241[i],
-								anIntArray1207[i]);
+						Stream stream = Sounds.method241(soundType[i],
+								sound[i]);
 						if (System.currentTimeMillis()
 								+ (long) (stream.offset / 22) > aLong1172
 								+ (long) (anInt1257 / 22))
@@ -7167,8 +7167,8 @@ public final class client extends RSApplet
 							aLong1172 = System.currentTimeMillis();
 							if (saveWave(stream.buffer, stream.offset))
 							{
-								anInt874 = anIntArray1207[i];
-								anInt1289 = anIntArray1241[i];
+								currentSoundId = sound[i];
+								currentSoundType = soundType[i];
 							}
 							else
 							{
@@ -7180,34 +7180,34 @@ public final class client extends RSApplet
 				catch (Exception exception)
 				{
 				}
-				if (!flag1 || anIntArray1250[i] == -5)
+				if (!flag1 || soundDelay[i] == -5)
 				{
-					anInt1062--;
-					for (int j = i; j < anInt1062; j++)
+					currentSound--;
+					for (int j = i; j < currentSound; j++)
 					{
-						anIntArray1207[j] = anIntArray1207[j + 1];
-						anIntArray1241[j] = anIntArray1241[j + 1];
-						anIntArray1250[j] = anIntArray1250[j + 1];
+						sound[j] = sound[j + 1];
+						soundType[j] = soundType[j + 1];
+						soundDelay[j] = soundDelay[j + 1];
 					}
 
 					i--;
 				}
 				else
 				{
-					anIntArray1250[i] = -5;
+					soundDelay[i] = -5;
 				}
 			}
 			else
 			{
-				anIntArray1250[i]--;
+				soundDelay[i]--;
 			}
 
-		if (prevSong > 0)
+		if (previousSong > 0)
 		{
-			prevSong -= 20;
-			if (prevSong < 0)
-				prevSong = 0;
-			if (prevSong == 0 && musicEnabled && !highMemory)
+			previousSong -= 20;
+			if (previousSong < 0)
+				previousSong = 0;
+			if (previousSong == 0 && musicEnabled && !lowMemory)
 			{
 				nextSong = currentSong;
 				songChanging = true;
@@ -7298,7 +7298,7 @@ public final class client extends RSApplet
 			onDemandFetcher.start(streamLoader_6, this);
 			Class36.method528(onDemandFetcher.getAnimCount());
 			Model.method459(onDemandFetcher.getVersionCount(0), onDemandFetcher);
-			if (!highMemory)
+			if (!lowMemory)
 			{
 				nextSong = 0;
 				try
@@ -7447,7 +7447,7 @@ public final class client extends RSApplet
 			}
 
 			onDemandFetcher.method554(isMembers);
-			if (!highMemory)
+			if (!lowMemory)
 			{
 				int l = onDemandFetcher.getVersionCount(2);
 				for (int i3 = 1; i3 < l; i3++)
@@ -7603,7 +7603,7 @@ public final class client extends RSApplet
 			Varp.unpackConfig(streamLoader);
 			VarBit.unpackConfig(streamLoader);
 			ItemDef.isMembers = isMembers;
-			if (!highMemory)
+			if (!lowMemory)
 			{
 				drawLoadingText(90, "Unpacking sounds");
 				byte abyte0[] = streamLoader_5.getDataForName("sounds.dat");
@@ -9304,7 +9304,7 @@ public final class client extends RSApplet
 			Runtime runtime = Runtime.getRuntime();
 			int j1 = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
 			i1 = 0xffff00;
-			if (j1 > 0x2000000 && highMemory)
+			if (j1 > 0x2000000 && lowMemory)
 				i1 = 0xff0000;
 			aTextDrawingArea_1271.method380("Mem:" + j1 + "k", c, 0xffff00, k);
 			k += 15;
@@ -10597,13 +10597,13 @@ public final class client extends RSApplet
 			if (myPlayer.smallX[0] >= k3 - i14
 					&& myPlayer.smallX[0] <= k3 + i14
 					&& myPlayer.smallY[0] >= j6 - i14
-					&& myPlayer.smallY[0] <= j6 + i14 && aBoolean848 && !highMemory
-					&& anInt1062 < 50)
+					&& myPlayer.smallY[0] <= j6 + i14 && aBoolean848 && !lowMemory
+					&& currentSound < 50)
 			{
-				anIntArray1207[anInt1062] = i9;
-				anIntArray1241[anInt1062] = i16;
-				anIntArray1250[anInt1062] = Sounds.anIntArray326[i9];
-				anInt1062++;
+				sound[currentSound] = i9;
+				soundType[currentSound] = i16;
+				soundDelay[currentSound] = Sounds.anIntArray326[i9];
+				currentSound++;
 			}
 		}
 		if (j == 215)
@@ -10891,7 +10891,7 @@ public final class client extends RSApplet
 	{
 		WorldController.lowMem = true;
 		Texture.lowMem = true;
-		highMemory = true;
+		lowMemory = true;
 		ObjectManager.lowMem = true;
 		ObjectDef.lowMem = true;
 	}
@@ -11106,7 +11106,7 @@ public final class client extends RSApplet
 	{
 		if (i1 >= 1 && i >= 1 && i1 <= 102 && i <= 102)
 		{
-			if (highMemory && j != plane)
+			if (lowMemory && j != plane)
 				return;
 			int i2 = 0;
 			if (j1 == 0)
@@ -11441,30 +11441,30 @@ public final class client extends RSApplet
 			}
 			if (pktType == 74)
 			{
-				int i2 = inStream.method434();
-				if (i2 == 65535)
-					i2 = -1;
-				if (i2 != currentSong && musicEnabled && !highMemory
-						&& prevSong == 0)
+				int songId = inStream.method434();
+				if (songId == 65535)
+					songId = -1;
+				if (songId != currentSong && musicEnabled && !lowMemory
+						&& previousSong == 0)
 				{
-					nextSong = i2;
+					nextSong = songId;
 					songChanging = true;
 					onDemandFetcher.method558(2, nextSong);
 				}
-				currentSong = i2;
+				currentSong = songId;
 				pktType = -1;
 				return true;
 			}
 			if (pktType == 121)
 			{
-				int j2 = inStream.method436();
-				int k10 = inStream.method435();
-				if (musicEnabled && !highMemory)
+				int songId = inStream.method436();
+				int songDelay = inStream.method435();
+				if (musicEnabled && !lowMemory)
 				{
-					nextSong = j2;
+					nextSong = songId;
 					songChanging = false;
 					onDemandFetcher.method558(2, nextSong);
-					prevSong = k10;
+					previousSong = songDelay;
 				}
 				pktType = -1;
 				return true;
@@ -11797,15 +11797,15 @@ public final class client extends RSApplet
 			}
 			if (pktType == 174)
 			{
-				int i4 = inStream.readUnsignedWord();
-				int l11 = inStream.readUnsignedByte();
-				int k17 = inStream.readUnsignedWord();
-				if (aBoolean848 && !highMemory && anInt1062 < 50)
+				int soundId = inStream.readUnsignedWord();
+				int type = inStream.readUnsignedByte();
+				int delay = inStream.readUnsignedWord();
+				if (aBoolean848 && !lowMemory && currentSound < 50)
 				{
-					anIntArray1207[anInt1062] = i4;
-					anIntArray1241[anInt1062] = l11;
-					anIntArray1250[anInt1062] = k17 + Sounds.anIntArray326[i4];
-					anInt1062++;
+					sound[currentSound] = soundId;
+					soundType[currentSound] = type;
+					soundDelay[currentSound] = delay + Sounds.anIntArray326[soundId];
+					currentSound++;
 				}
 				pktType = -1;
 				return true;
@@ -12648,7 +12648,7 @@ public final class client extends RSApplet
 		currentExp = new int[Skills.skillsCount];
 		aBoolean872 = false;
 		anIntArray873 = new int[5];
-		anInt874 = -1;
+		currentSoundId = -1;
 		aBooleanArray876 = new boolean[5];
 		drawFlames = false;
 		reportAbuseInput = "";
@@ -12757,7 +12757,7 @@ public final class client extends RSApplet
 		outStream1 = Stream.create();
 		menuActionName = new String[500];
 		anIntArray1203 = new int[5];
-		anIntArray1207 = new int[50];
+		sound = new int[50];
 		anInt1210 = 2;
 		anInt1211 = 78;
 		promptInput = "";
@@ -12769,9 +12769,9 @@ public final class client extends RSApplet
 		aClass11Array1230 = new Class11[4];
 		aBoolean1233 = false;
 		anIntArray1240 = new int[100];
-		anIntArray1241 = new int[50];
+		soundType = new int[50];
 		aBoolean1242 = false;
-		anIntArray1250 = new int[50];
+		soundDelay = new int[50];
 		rsAlreadyLoaded = false;
 		welcomeScreenRaised = false;
 		messagePromptRaised = false;
@@ -12781,7 +12781,7 @@ public final class client extends RSApplet
 		anInt1279 = 2;
 		bigX = new int[4000];
 		bigY = new int[4000];
-		anInt1289 = -1;
+		currentSoundType = -1;
 	}
 
 	private int ignoreCount;
@@ -12831,7 +12831,7 @@ public final class client extends RSApplet
 	private Sprite mapMarker;
 	private boolean aBoolean872;
 	private final int[] anIntArray873;
-	private int anInt874;
+	private int currentSoundId;
 	private final boolean[] aBooleanArray876;
 	private int weight;
 	private MouseDetection mouseDetection;
@@ -12905,7 +12905,7 @@ public final class client extends RSApplet
 	private static int nodeID = 10;
 	static int portOff;
 	private static boolean isMembers = true;
-	private static boolean highMemory;
+	private static boolean lowMemory;
 	private volatile boolean drawingFlames;
 	private int spriteDrawX;
 	private int spriteDrawY;
@@ -13005,7 +13005,7 @@ public final class client extends RSApplet
 	private final RSInterface aClass9_1059;
 	private Background[] mapScenes;
 	private static int anInt1061;
-	private int anInt1062;
+	private int currentSound;
 	private final int anInt1063;
 	private int friendsListAction;
 	private final int[] anIntArray1065;
@@ -13142,7 +13142,7 @@ public final class client extends RSApplet
 	static final int[] anIntArray1204 = { 9104, 10275, 7595, 3610, 7975, 8526,
 			918, 38802, 24466, 10145, 58654, 5027, 1457, 16565, 34991, 25486 };
 	private static boolean flaggedCheating;
-	private final int[] anIntArray1207;
+	private final int[] sound;
 	private int anInt1208;
 	private int minimapInt2;
 	private int anInt1210;
@@ -13172,7 +13172,7 @@ public final class client extends RSApplet
 	private int anInt1238;
 	public final int anInt1239 = 100;
 	private final int[] anIntArray1240;
-	private final int[] anIntArray1241;
+	private final int[] soundType;
 	private boolean aBoolean1242;
 	private int atInventoryLoopCycle;
 	private int atInventoryInterface;
@@ -13181,7 +13181,7 @@ public final class client extends RSApplet
 	private byte[][] aByteArrayArray1247;
 	private int tradeMode;
 	private int anInt1249;
-	private final int[] anIntArray1250;
+	private final int[] soundDelay;
 	private int anInt1251;
 	private final boolean rsAlreadyLoaded;
 	private int anInt1253;
@@ -13190,7 +13190,7 @@ public final class client extends RSApplet
 	private boolean messagePromptRaised;
 	private int anInt1257;
 	private byte[][][] byteGroundArray;
-	private int prevSong;
+	private int previousSong;
 	private int destX;
 	private int destY;
 	private Sprite aClass30_Sub2_Sub1_Sub1_1263;
@@ -13216,7 +13216,7 @@ public final class client extends RSApplet
 	private String selectedItemName;
 	private int publicChatMode;
 	private static int anInt1288;
-	private int anInt1289;
+	private int currentSoundType;
 	public static int anInt1290;
 
 	static
