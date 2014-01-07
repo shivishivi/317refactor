@@ -3651,7 +3651,7 @@ public final class client extends RSApplet
 		aTextDrawingArea_1271.drawText(0xffffff,
 				"Please wait - attempting to reestablish", 158, 256);
 		aRSImageProducer_1165.drawGraphics(4, super.graphics, 4);
-		anInt1021 = 0;
+		minimapState = 0;
 		destX = 0;
 		RSSocket rsSocket = socketStream;
 		loggedIn = false;
@@ -6296,7 +6296,7 @@ public final class client extends RSApplet
 				minimapInt2 = (int) (Math.random() * 120D) - 60;
 				minimapInt3 = (int) (Math.random() * 30D) - 20;
 				minimapInt1 = (int) (Math.random() * 20D) - 10 & 0x7ff;
-				anInt1021 = 0;
+				minimapState = 0;
 				anInt985 = -1;
 				destX = 0;
 				destY = 0;
@@ -7727,7 +7727,7 @@ public final class client extends RSApplet
 
 	private void processMainScreenClick()
 	{
-		if (anInt1021 != 0)
+		if (minimapState != 0)
 			return;
 		if (super.clickMode3 == 1)
 		{
@@ -9909,7 +9909,7 @@ public final class client extends RSApplet
 	private void drawMinimap()
 	{
 		aRSImageProducer_1164.initDrawingArea();
-		if (anInt1021 == 2)
+		if (minimapState == 2)
 		{
 			byte abyte0[] = mapBack.aByteArray1450;
 			int ai[] = DrawingArea.pixels;
@@ -9917,19 +9917,20 @@ public final class client extends RSApplet
 			for (int i5 = 0; i5 < k2; i5++)
 				if (abyte0[i5] == 0)
 					ai[i5] = 0;
-
+			
 			compass.method352(33, minimapInt1, anIntArray1057, 256,
-					anIntArray968, 25, 0, 0, 33, 25);
+				anIntArray968, 25, 0, 0, 33, 25);
 			aRSImageProducer_1165.initDrawingArea();
 			return;
 		}
 		int i = minimapInt1 + minimapInt2 & 0x7ff;
 		int j = 48 + myPlayer.x / 32;
 		int l2 = 464 - myPlayer.y / 32;
+		
 		aClass30_Sub2_Sub1_Sub1_1263.method352(151, i, anIntArray1229,
-				256 + minimapInt3, anIntArray1052, l2, 5, 25, 146, j);
+			256 + minimapInt3, anIntArray1052, l2, 5, 25, 146, j);
 		compass.method352(33, minimapInt1, anIntArray1057, 256, anIntArray968,
-				25, 0, 0, 33, 25);
+			25, 0, 0, 33, 25);
 		for (int j5 = 0; j5 < anInt1071; j5++)
 		{
 			int k = (anIntArray1072[j5] * 4 + 2) - myPlayer.x / 32;
@@ -11749,7 +11750,7 @@ public final class client extends RSApplet
 			}
 			if (pktType == 99)
 			{
-				anInt1021 = inStream.readUnsignedByte();
+				minimapState = inStream.readUnsignedByte();
 				pktType = -1;
 				return true;
 			}
@@ -12967,7 +12968,7 @@ public final class client extends RSApplet
 	private boolean aBoolean1017;
 	private int anInt1018;
 	private static final int[] anIntArray1019;
-	private int anInt1021;
+	private int minimapState;
 	private int anInt1022;
 	private int loadingStage;
 	private Background scrollBar1;
