@@ -50,16 +50,16 @@ final class ObjectManager
 			}
 
 		}
-		anInt123 += (int) (Math.random() * 5D) - 2;
-		if (anInt123 < -8)
-			anInt123 = -8;
-		if (anInt123 > 8)
-			anInt123 = 8;
-		anInt133 += (int) (Math.random() * 5D) - 2;
-		if (anInt133 < -16)
-			anInt133 = -16;
-		if (anInt133 > 16)
-			anInt133 = 16;
+		hueOffset += (int) (Math.random() * 5D) - 2;
+		if (hueOffset < -8)
+			hueOffset = -8;
+		if (hueOffset > 8)
+			hueOffset = 8;
+		lightnessOffset += (int) (Math.random() * 5D) - 2;
+		if (lightnessOffset < -16)
+			lightnessOffset = -16;
+		if (lightnessOffset > 16)
+			lightnessOffset = 16;
 		for (int l = 0; l < 4; l++)
 		{
 			byte abyte0[][] = aByteArrayArrayArray134[l];
@@ -115,8 +115,8 @@ final class ObjectManager
 						{
 							Flo flo = Flo.cache[l12 - 1];
 							anIntArray124[i8] += flo.anInt397;
-							anIntArray125[i8] += flo.anInt395;
-							anIntArray126[i8] += flo.anInt396;
+							anIntArray125[i8] += flo.saturation;
+							anIntArray126[i8] += flo.lightness;
 							anIntArray127[i8] += flo.anInt398;
 							anIntArray128[i8]++;
 						}
@@ -129,8 +129,8 @@ final class ObjectManager
 						{
 							Flo flo_1 = Flo.cache[i14 - 1];
 							anIntArray124[i8] -= flo_1.anInt397;
-							anIntArray125[i8] -= flo_1.anInt395;
-							anIntArray126[i8] -= flo_1.anInt396;
+							anIntArray125[i8] -= flo_1.saturation;
+							anIntArray126[i8] -= flo_1.lightness;
 							anIntArray127[i8] -= flo_1.anInt398;
 							anIntArray128[i8]--;
 						}
@@ -192,8 +192,8 @@ final class ObjectManager
 									int j22 = j13 / k16;
 									int l22 = j14 / k16;
 									j21 = method177(l21, j22, l22);
-									l21 = l21 + anInt123 & 0xff;
-									l22 += anInt133;
+									l21 = l21 + hueOffset & 0xff;
+									l22 += lightnessOffset;
 									if (l22 < 0)
 										l22 = 0;
 									else if (l22 > 255)
@@ -248,10 +248,10 @@ final class ObjectManager
 									}
 									else
 									{
-										j23 = method177(flo_2.anInt394,
-												flo_2.anInt395, flo_2.anInt396);
+										j23 = method177(flo_2.hue,
+												flo_2.saturation, flo_2.lightness);
 										k23 = Texture.anIntArray1482[method185(
-												flo_2.anInt399, 96)];
+												flo_2.hslColour, 96)];
 									}
 									worldController.method279(l, l6, k17, k22,
 											byte4, i23, j19, k19, l19, i20,
@@ -1502,7 +1502,7 @@ final class ObjectManager
 		}
 	}
 
-	private static int anInt123 = (int) (Math.random() * 17D) - 8;
+	private static int hueOffset = (int) (Math.random() * 17D) - 8;
 	private final int[] anIntArray124;
 	private final int[] anIntArray125;
 	private final int[] anIntArray126;
@@ -1511,7 +1511,7 @@ final class ObjectManager
 	private final int[][][] anIntArrayArrayArray129;
 	private final byte[][][] aByteArrayArrayArray130;
 	static int anInt131;
-	private static int anInt133 = (int) (Math.random() * 33D) - 16;
+	private static int lightnessOffset = (int) (Math.random() * 33D) - 16;
 	private final byte[][][] aByteArrayArrayArray134;
 	private final int[][][] anIntArrayArrayArray135;
 	private final byte[][][] aByteArrayArrayArray136;
