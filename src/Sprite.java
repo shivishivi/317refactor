@@ -254,7 +254,7 @@ public final class Sprite extends DrawingArea
 		}
 	}
 
-	public void drawSprite(int i, int k)
+	public void drawImage(int i, int k)
 	{
 		i += anInt1442;
 		k += anInt1443;

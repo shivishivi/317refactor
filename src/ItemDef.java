@@ -286,7 +286,7 @@ public final class ItemDef
 		int j3 = DrawingArea.bottomY;
 		Texture.aBoolean1464 = false;
 		DrawingArea.initDrawingArea(32, 32, sprite2.myPixels);
-		DrawingArea.method336(32, 0, 0, 0, 32);
+		DrawingArea.fillRectangle(32, 0, 0, 0, 32);
 		Texture.method364();
 		int k3 = itemDef.modelZoom;
 		if (k == -1)
@@ -354,7 +354,7 @@ public final class ItemDef
 			int j6 = sprite.anInt1445;
 			sprite.anInt1444 = 32;
 			sprite.anInt1445 = 32;
-			sprite.drawSprite(0, 0);
+			sprite.drawImage(0, 0);
 			sprite.anInt1444 = l5;
 			sprite.anInt1445 = j6;
 		}

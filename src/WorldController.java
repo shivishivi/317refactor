@@ -362,7 +362,7 @@ final class WorldController
 		return true;
 	}
 
-	public void clearObj5Cache()
+	public void clearInteractableObjectCache()
 	{
 		for (int i = 0; i < obj5CacheCurrPos; i++)
 		{
@@ -1021,7 +1021,7 @@ final class WorldController
 		anInt471 = -1;
 	}
 
-	public void method313(int i, int j, int k, int l, int i1, int j1)
+	public void render(int i, int j, int k, int l, int i1, int j1)
 	{
 		if (i < 0)
 			i = 0;

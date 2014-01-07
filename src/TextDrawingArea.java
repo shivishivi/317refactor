@@ -45,8 +45,8 @@ public final class TextDrawingArea extends DrawingArea
 				}
 
 			}
-			if (j1 > anInt1497 && l < 128)
-				anInt1497 = j1;
+			if (j1 > charHeight && l < 128)
+				charHeight = j1;
 			anIntArray1494[l] = 1;
 			anIntArray1496[l] = i1 + 2;
 			int k2 = 0;
@@ -78,12 +78,12 @@ public final class TextDrawingArea extends DrawingArea
 
 	public void method380(String s, int i, int j, int k)
 	{
-		method385(j, s, k, i - method384(s));
+		method385(j, s, k, i - getStringWidth(s));
 	}
 
 	public void drawText(int i, String s, int k, int l)
 	{
-		method385(i, s, k, l - method384(s) / 2);
+		method385(i, s, k, l - getStringWidth(s) / 2);
 	}
 
 	public void method382(int i, int j, String s, int l, boolean flag)
@@ -106,7 +106,7 @@ public final class TextDrawingArea extends DrawingArea
 		return j;
 	}
 
-	public int method384(String s)
+	public int getStringWidth(String s)
 	{
 		if (s == null)
 			return 0;
@@ -120,7 +120,7 @@ public final class TextDrawingArea extends DrawingArea
 	{
 		if (s == null)
 			return;
-		j -= anInt1497;
+		j -= charHeight;
 		for (int i1 = 0; i1 < s.length(); i1++)
 		{
 			char c = s.charAt(i1);
@@ -136,8 +136,8 @@ public final class TextDrawingArea extends DrawingArea
 	{
 		if (s == null)
 			return;
-		j -= method384(s) / 2;
-		l -= anInt1497;
+		j -= getStringWidth(s) / 2;
+		l -= charHeight;
 		for (int i1 = 0; i1 < s.length(); i1++)
 		{
 			char c = s.charAt(i1);
@@ -159,8 +159,8 @@ public final class TextDrawingArea extends DrawingArea
 	{
 		if (s == null)
 			return;
-		i -= method384(s) / 2;
-		k -= anInt1497;
+		i -= getStringWidth(s) / 2;
+		k -= charHeight;
 		for (int i1 = 0; i1 < s.length(); i1++)
 		{
 			char c = s.charAt(i1);
@@ -188,8 +188,8 @@ public final class TextDrawingArea extends DrawingArea
 		double d = 7D - (double) i / 8D;
 		if (d < 0.0D)
 			d = 0.0D;
-		l -= method384(s) / 2;
-		k -= anInt1497;
+		l -= getStringWidth(s) / 2;
+		k -= charHeight;
 		for (int k1 = 0; k1 < s.length(); k1++)
 		{
 			char c = s.charAt(k1);
@@ -213,7 +213,7 @@ public final class TextDrawingArea extends DrawingArea
 		int l = i;
 		if (s == null)
 			return;
-		k -= anInt1497;
+		k -= charHeight;
 		for (int i1 = 0; i1 < s.length(); i1++)
 			if (s.charAt(i1) == '@' && i1 + 4 < s.length()
 					&& s.charAt(i1 + 4) == '@')
@@ -240,7 +240,7 @@ public final class TextDrawingArea extends DrawingArea
 			}
 		if (aBoolean1499)
 			DrawingArea.method339(k
-					+ (int) ((double) anInt1497 * 0.69999999999999996D),
+					+ (int) ((double) charHeight * 0.69999999999999996D),
 					0x800000, i - l, l);
 	}
 
@@ -250,7 +250,7 @@ public final class TextDrawingArea extends DrawingArea
 			return;
 		aRandom1498.setSeed(k);
 		int j1 = 192 + (aRandom1498.nextInt() & 0x1f);
-		i1 -= anInt1497;
+		i1 -= charHeight;
 		for (int k1 = 0; k1 < s.length(); k1++)
 			if (s.charAt(k1) == '@' && k1 + 4 < s.length()
 					&& s.charAt(k1 + 4) == '@')
@@ -473,7 +473,7 @@ public final class TextDrawingArea extends DrawingArea
 	private final int[] anIntArray1494;
 	private final int[] anIntArray1495;
 	private final int[] anIntArray1496;
-	public int anInt1497;
+	public int charHeight;
 	private final Random aRandom1498;
 	private boolean aBoolean1499;
 }

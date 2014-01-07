@@ -60,6 +60,8 @@ public final class Flo
 
 	private void method262(int rgb)
 	{
+		// http://support.microsoft.com/kb/29240
+		
 		// Extract the individual RGB values from the colour
 		double red = (double) (rgb >> 16 & 0xff) / 256D;
 		double green = (double) (rgb >> 8 & 0xff) / 256D;

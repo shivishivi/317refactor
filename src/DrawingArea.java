@@ -84,7 +84,7 @@ public class DrawingArea extends NodeSub
 		}
 	}
 
-	public static void method336(int i, int j, int k, int l, int i1)
+	public static void fillRectangle(int i, int j, int k, int l, int i1)
 	{
 		if (k < topX)
 		{

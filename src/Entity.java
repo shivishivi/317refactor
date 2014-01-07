@@ -46,7 +46,7 @@ public class Entity extends Animable
 		for (int i1 = 0; i1 < 4; i1++)
 			if (hitsLoopCycle[i1] <= l)
 			{
-				hitArray[i1] = k;
+				hitAmounts[i1] = k;
 				hitMarkTypes[i1] = j;
 				hitsLoopCycle[i1] = l + 70;
 				return;
@@ -119,7 +119,7 @@ public class Entity extends Animable
 		height = 200;
 		anInt1511 = -1;
 		anInt1512 = -1;
-		hitArray = new int[4];
+		hitAmounts = new int[4];
 		hitMarkTypes = new int[4];
 		hitsLoopCycle = new int[4];
 		anInt1517 = -1;
@@ -147,8 +147,8 @@ public class Entity extends Animable
 	public int turnDirection;
 	int anInt1511;
 	int anInt1512;
-	int anInt1513;
-	final int[] hitArray;
+	int chatEffectColour;
+	final int[] hitAmounts;
 	final int[] hitMarkTypes;
 	final int[] hitsLoopCycle;
 	int anInt1517;
@@ -165,7 +165,7 @@ public class Entity extends Animable
 	int anInt1528;
 	int anInt1529;
 	int anInt1530;
-	int anInt1531;
+	int chatEffectType;
 	public int loopCycleStatus;
 	public int currentHealth;
 	public int maxHealth;
